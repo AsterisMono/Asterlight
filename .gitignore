@@ -2,3 +2,10 @@ cosign.key
 _build_*
 output
 _build-*/**
+
+# Nix
+.direnv
+.devenv
+.pre-commit-config.yaml
+result
+.DS_Store

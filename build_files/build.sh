@@ -8,7 +8,7 @@ set -ouex pipefail
 wget -O /tmp/clash.rpm https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.4.2/Clash.Verge-2.4.2-1.x86_64.rpm && dnf5 install -y /tmp/clash.rpm
 
 # Nix
-curl -fsSL https://install.determinate.systems/nix | sh -s -- install --determinate
+wget -O /tmp/nix.rpm https://nix-community.github.io/nix-installers/nix/x86_64/nix-multi-user-2.24.10.rpm && dnf5 install -y /tmp/nix.rpm
 
 # Use a COPR Example:
 #

@@ -4,13 +4,11 @@ set -ouex pipefail
 
 ### Install packages
 
-# Packages can be installed from any enabled yum repo on the image.
-# RPMfusion repos are available by default in ublue main images
-# List of rpmfusion packages can be found here:
-# https://mirrors.rpmfusion.org/mirrorlist?path=free/fedora/updates/39/x86_64/repoview/index.html&protocol=https&redirect=1
+# Clash verge rev
+wget -O /tmp/clash.rpm https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.4.2/Clash.Verge-2.4.2-1.x86_64.rpm && dnf5 install -y /tmp/clash.rpm
 
-# this installs a package from fedora repos
-# dnf5 install -y tmux 
+# Nix
+curl -fsSL https://install.determinate.systems/nix | sh -s -- install --determinate
 
 # Use a COPR Example:
 #
@@ -21,4 +19,4 @@ set -ouex pipefail
 
 #### Example for enabling a System Unit File
 
-systemctl enable podman.socket
+# systemctl enable podman.socket

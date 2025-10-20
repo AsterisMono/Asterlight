@@ -182,6 +182,7 @@ _build-bib $target_image $tag $type $config: (_rootful_load_image target_image t
       ${args} \
       "ghcr.io/asterismono/${target_image}:${tag}"
 
+    sudo rm -r output
     mkdir -p output
     sudo mv -f $BUILDTMP/* output/
     sudo rmdir $BUILDTMP

@@ -1,6 +1,6 @@
 export image_name := env("IMAGE_NAME", "asterlight") # output image name, usually same as repo name, change as needed
 export default_tag := env("DEFAULT_TAG", "latest")
-export bib_image := env("BIB_IMAGE", "quay.io/centos-bootc/bootc-image-builder:latest")
+export bib_image := env("BIB_IMAGE", "ghcr.io/osbuild/bootc-image-builder:latest")
 
 alias build-vm := build-qcow2
 alias rebuild-vm := rebuild-qcow2
@@ -146,7 +146,7 @@ _rootful_load_image $target_image=image_name $tag=default_tag:
         fi
     else
         # If the image is not found, pull it from the repository
-        just sudoif podman pull "${target_image}:${tag}"
+        just sudoif podman pull ghcr.io/asterismono/"${target_image}:${tag}"
     fi
 
 # Build a bootc bootable image using Bootc Image Builder (BIB)
@@ -180,12 +180,12 @@ _build-bib $target_image $tag $type $config: (_rootful_load_image target_image t
       -v /var/lib/containers/storage:/var/lib/containers/storage \
       "${bib_image}" \
       ${args} \
-      "${target_image}:${tag}"
+      "ghcr.io/asterismono/${target_image}:${tag}"
 
     mkdir -p output
     sudo mv -f $BUILDTMP/* output/
     sudo rmdir $BUILDTMP
-    sudo chown -R $USER:$USER output/
+    sudo chown -R $USER output/
 
 # Podman builds the image from the Containerfile and creates a bootable image
 # Parameters:

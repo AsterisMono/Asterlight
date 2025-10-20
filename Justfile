@@ -238,31 +238,15 @@ _run-vm $target_image $tag $type $config:
         just "build-${type}" "$target_image" "$tag"
     fi
 
-    # Determine an available port to use
-    port=8006
-    while grep -q :${port} <<< $(ss -tunalp); do
-        port=$(( port + 1 ))
-    done
-    echo "Using Port: ${port}"
-    echo "Connect to http://localhost:${port}"
-
-    # Set up the arguments for running the VM
-    run_args=()
-    run_args+=(--rm --privileged)
-    run_args+=(--pull=newer)
-    run_args+=(--publish "127.0.0.1:${port}:8006")
-    run_args+=(--env "CPU_CORES=4")
-    run_args+=(--env "RAM_SIZE=8G")
-    run_args+=(--env "DISK_SIZE=64G")
-    run_args+=(--env "TPM=Y")
-    run_args+=(--env "GPU=Y")
-    run_args+=(--device=/dev/kvm)
-    run_args+=(--volume "${PWD}/${image_file}":"/boot.${type}")
-    run_args+=(docker.io/qemux/qemu)
-
-    # Run the VM and open the browser to connect
-    (sleep 30 && xdg-open http://localhost:"$port") &
-    podman run "${run_args[@]}"
+    qemu-system-x86_64 \
+        -enable-kvm -cpu host -smp 4 -m 8G \
+        -drive file="${PWD}/${image_file},format=${type}" \
+        -boot c \
+        -device virtio-vga \
+        -display gtk,show-cursor=on \
+        -rtc base=localtime -usb -device usb-tablet \
+        -nic user,model=virtio-net-pci \
+        -name Asterlight
 
 # Run a virtual machine from a QCOW2 image
 [group('Run Virtal Machine')]

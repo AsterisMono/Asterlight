@@ -146,7 +146,7 @@ _rootful_load_image $target_image=image_name $tag=default_tag:
         fi
     else
         # If the image is not found, pull it from the repository
-        just sudoif podman pull ghcr.io/asterismono/"${target_image}:${tag}"
+        just sudoif podman pull "${target_image}:${tag}"
     fi
 
 # Build a bootc bootable image using Bootc Image Builder (BIB)
@@ -182,7 +182,7 @@ _build-bib $target_image $tag $type $config: (_rootful_load_image target_image t
       ${args} \
       "${target_image}:${tag}"
 
-    sudo rm -r output
+    sudo rm -rf output
     mkdir -p output
     sudo mv -f $BUILDTMP/* output/
     sudo rmdir $BUILDTMP

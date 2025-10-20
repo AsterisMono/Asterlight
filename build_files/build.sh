@@ -5,18 +5,24 @@ set -ouex pipefail
 ### Install packages
 
 # Clash verge rev
-wget -O /tmp/clash.rpm https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.4.2/Clash.Verge-2.4.2-1.x86_64.rpm && dnf5 install -y /tmp/clash.rpm
+wget -O /tmp/clash.rpm https://github.com/clash-verge-rev/clash-verge-rev/releases/download/v2.4.2/Clash.Verge-2.4.2-1.x86_64.rpm
+dnf5 install -y /tmp/clash.rpm
+sudo tee /etc/systemd/system/clash-verge.service > /dev/null <<'EOF'
+[Unit]
+Description=Clash Verge Service helps to launch Clash Core.
+After=network-online.target nftables.service iptables.service
 
-# Nix
-wget -O /tmp/nix.rpm https://nix-community.github.io/nix-installers/nix/x86_64/nix-multi-user-2.24.10.rpm && dnf5 install -y /tmp/nix.rpm
+[Service]
+Type=simple
+ExecStart=/usr/bin/clash-verge-service
+Restart=always
+RestartSec=5
 
-# Use a COPR Example:
-#
-# dnf5 -y copr enable ublue-os/staging
-# dnf5 -y install package
-# Disable COPRs so they don't end up enabled on the final image:
-# dnf5 -y copr disable ublue-os/staging
+[Install]
+WantedBy=multi-user.target
+EOF
+systemctl enable clash-verge.service
 
-#### Example for enabling a System Unit File
-
-# systemctl enable podman.socket
+# Flathub mirror
+wget -O /tmp/flathub.gpg https://mirror.sjtu.edu.cn/flathub/flathub.gpg
+sudo flatpak remote-modify --gpg-import=/tmp/flathub.gpg flathub

@@ -22,7 +22,3 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF
 systemctl enable clash-verge.service
-
-# Flathub mirror
-wget -O /tmp/flathub.gpg https://mirror.sjtu.edu.cn/flathub/flathub.gpg
-sudo flatpak remote-modify --gpg-import=/tmp/flathub.gpg flathub
